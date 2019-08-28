@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -24,11 +26,11 @@ public class OkhttpActivity extends AppCompatActivity {
 
         String url= "https://api.themoviedb.org/3/movie/top_rated?api_key=be6e82ab66a065f245b84e4b4692aee8&language=en-US&page=1";
         OkHttpClient client = new OkHttpClient();
-//        String run (String url) throws IOException {
             Request request = new Request.Builder()
                     .url(url)
                     .build();
 
+        final Gson gson = new Gson();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -38,11 +40,12 @@ public class OkhttpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if(response.isSuccessful()){
-                    final String myresponse= response.body().string();
+                    final MtPojo movie=gson.fromJson(response.body().string(),MtPojo.class);
+//                    final String myresponse= response.body().string();
                     OkhttpActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            showjson.setText(myresponse);
+                            showjson.setText( movie.getResults()[1].toString());
                         }
                     });
                 }

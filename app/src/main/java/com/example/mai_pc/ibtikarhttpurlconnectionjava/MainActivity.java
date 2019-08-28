@@ -8,6 +8,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +21,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private TextView tvData;
@@ -69,12 +75,58 @@ public class MainActivity extends AppCompatActivity {
                 while ((line = reader.readLine()) != null) {
                     buffer.append(line);
                 }
-                return buffer.toString();
+
+                //first method//
+
+//                String finaljson=buffer.toString();
+//                JSONObject parentobj= new JSONObject(finaljson);
+//                JSONArray parentarr= parentobj.getJSONArray("results");
+//                JSONObject finalobj= parentarr.getJSONObject(0);
+//                String moviename= finalobj.getString("title");
+//                int vote= finalobj.getInt("vote_count");
+//                return moviename + "-" + vote;
+
+
+                    //second  method//
+//                String finaljson=buffer.toString();
+//                JSONObject parentobj= new JSONObject(finaljson);
+//                JSONArray parentarr= parentobj.getJSONArray("results");
+//                StringBuffer finalBufferData= new StringBuffer();
+
+//                for(int i=0; i<parentarr.length();i++){
+//                    JSONObject finalobj= parentarr.getJSONObject(i);
+//                    String moviename= finalobj.getString("title");
+//                    int vote= finalobj.getInt("vote_count");
+//                    finalBufferData.append(moviename+"-"+ vote);
+//                }
+//                return finalBufferData.toString();
+
+                String finaljson=buffer.toString();
+                JSONObject parentobj= new JSONObject(finaljson);
+                JSONArray parentarr= parentobj.getJSONArray("results");
+
+                List<MovieModel> movieModelList= new ArrayList<>();
+//                String result = null;
+                for(int i=0; i<parentarr.length(); i++){
+                    JSONObject finalobj= parentarr.getJSONObject(i);
+                    MovieModel moviemodel= new MovieModel();
+//                    moviemodel.setTitle(finalobj.getString("title"));
+//                    moviemodel.setOriginal_language(finalobj.getString("Original_language"));
+//                    moviemodel.setVote_count(finalobj.getInt("Vote_count"));
+//                    moviemodel.setPopularity((float) finalobj.getDouble("Popularity"));
+
+//result.concat(String.valueOf(moviemodel));
+                    movieModelList.add(moviemodel);
+                }
+//                return movieModelList;
+
 
 
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             } finally {
                 if (connection != null) {
